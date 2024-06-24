@@ -1,0 +1,142 @@
+{% extends "core/base.html" %}
+
+{% block title %}Active Orders{% endblock %}
+
+{% block content %}
+<link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
+<div class="claim-box">
+    <div class="table-container">
+        <h2>Активные заявки</h2>
+        <form method="get" action="{% url 'orders:active_orders' %}" class="filter-form">
+            <div class="form-group">
+                <label for="urgency">Срочность:</label>
+                <select name="urgency" id="urgency" class="form-select" onchange="this.form.submit()">
+                    <option value="">Все</option>
+                    <option value="urgent" {% if urgency == 'urgent' %}selected{% endif %}>Срочно</option>
+                    <option value="not_urgent" {% if urgency == 'not_urgent' %}selected{% endif %}>Не срочно</option>
+                    <option value="very_urgent" {% if urgency == 'very_urgent' %}selected{% endif %}>Очень срочно</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Статус:</label>
+                <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+                    <option value="">Все</option>
+                    <option value="submitted" {% if status == 'submitted' %}selected{% endif %}>Отправлено</option>
+                    <option value="accepted" {% if status == 'accepted' %}selected{% endif %}>Принято</option>
+                    <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>В процессе</option>
+                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Завершено</option>
+                </select>
+            </div>
+        </form>
+        <!-- Display orders in a table -->
+        <div class="table-wrapper">
+            <div class="row">
+                <div class="cell"><p>Отправитель</p></div>
+                <div class="cell"><p>Корпус</p></div>
+                <div class="cell"><p>Дата</p></div>
+                <div class="cell"><p>Тип проблемы</p></div>
+                <div class="cell"><p>Срочность</p></div>
+                <div class="cell"><p>Статус</p></div>
+                <div class="cell"></div>
+            </div>
+            {% for order in orders %}
+            <div class="row">
+                <div class="cell"><p>{{ order.user.email }}</p></div>
+                <div class="cell"><p>{{ order.get_building_display }}</p></div>
+                <div class="cell"><p>{{ order.created_at|date:"d M Y" }}</p></div>
+                <div class="cell"><p>{{ order.problem_type }}</p></div>
+                <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
+                <div class="cell"><p>{{ order.get_status_display }}</p></div>
+                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}">Подробнее</a></div>
+            </div>
+            {% empty %}
+            <div class="row">
+                <div class="cell" colspan="7">Нету активных заявок</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: #E8E8E8;
+        font-weight: bold;
+    }
+    .topnav {
+        background-color: #B1040D;
+        width: 100%;
+        height: 5em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .topnav a {
+        color: #ffffff;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 20px;
+    }
+    .claim-box {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+    }
+    .claim-button {
+        width: 90%;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .table-container {
+        width: 100%;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+    }
+    .filter-form {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    .form-select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+    .submit-button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .submit-button:hover {
+        background-color: #45a049;
+    }
+    .table-wrapper {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .row {
+        display: flex;
+        background-color: #eee;
+        padding: 10px;
+        margin-bottom: 5px;
+    }
+    .cell {
+        flex: 1;
+        text-align: center;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}

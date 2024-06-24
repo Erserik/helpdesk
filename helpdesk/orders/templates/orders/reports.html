@@ -1,0 +1,212 @@
+{% extends "core/base.html" %}
+
+{% block title %}Finished Orders Reports{% endblock %}
+{% block content %}
+<link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
+<div class="claim-box">
+    <div class="table-container">
+        <h2>Finished Orders Reports</h2>
+        <form method="get" action="{% url 'orders:reports' %}" class="filter-form">
+            <div class="form-group">
+                <label for="problem_type">Problem Type:</label>
+                <select name="problem_type" id="problem_type" class="form-select">
+                    <option value="">All Types</option>
+                    {% for type in problem_types %}
+                        <option value="{{ type.id }}" {% if type.id == request.GET.problem_type %}selected{% endif %}>{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="executor">Executor:</label>
+                <select name="executor" id="executor" class="form-select">
+                    <option value="">All Executors</option>
+                    {% for executor in executors %}
+                        <option value="{{ executor.id }}" {% if executor.id == request.GET.executor %}selected{% endif %}>{{ executor.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="building">Building:</label>
+                <select name="building" id="building" class="form-select">
+                    <option value="">All Buildings</option>
+                    {% for key, value in buildings.items %}
+                        <option value="{{ key }}" {% if key == request.GET.building %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+        <a href="?download=all" class="btn btn-primary" style="margin: 10px 0;">Download All Finished Orders</a>
+        <div class="table-wrapper">
+            <div class="row header">
+                <div class="cell"><p>Order ID</p></div>
+                <div class="cell"><p>Building</p></div>
+                <div class="cell"><p>Room Number</p></div>
+                <div class="cell"><p>Sender</p></div>
+                <div class="cell"><p>Executor</p></div>
+                <div class="cell"><p>Status</p></div>
+                <div class="cell"><p>Urgency</p></div>
+                <div class="cell"><p>Created At</p></div>
+                <div class="cell"><p>Completed At</p></div>
+                <div class="cell"><p>Download</p></div>
+            </div>
+            {% for order in orders %}
+            <div class="row">
+                <div class="cell"><p>{{ order.id }}</p></div>
+                <div class="cell"><p>{{ order.get_building_display }}</p></div>
+                <div class="cell"><p>{{ order.room_number }}</p></div>
+                <div class="cell"><p>{{ order.user.username }}</p></div>
+                <div class="cell">
+                    <p>{% if order.executor %}{{ order.executor.username }}{% else %}None{% endif %}</p>
+                </div>
+                <div class="cell"><p>{{ order.get_status_display }}</p></div>
+                <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
+                <div class="cell"><p>{{ order.created_at|date:"Y-m-d H:i" }}</p></div>
+                <div class="cell"><p>{{ order.completed_at|date:"Y-m-d H:i" }}</p></div>
+                <div class="cell"><p><a href="{% url 'orders:download_order_report' order.id %}">Download</a></p></div>
+            </div>
+            {% empty %}
+            <div class="row">
+                <div class="cell" colspan="10"><p>No records found</p></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: #E8E8E8;
+        font-weight: bold;
+    }
+    .topnav {
+        background-color: #B1040D;
+        width: 100%;
+        height: 5em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .topnav a {
+        color: #ffffff;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 20px;
+    }
+    .claim-box {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+        padding: 0 20px;
+    }
+    .claim-button {
+        width: 90%;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .table-container {
+        width: 100%;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        position: relative;
+    }
+    .filter-form {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        width: 48%;
+    }
+    .form-control, .form-select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+    }
+    .btn {
+        padding: 10px 20px;
+        background-color: #B1040D;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        font-size: 16px;
+    }
+    .btn:hover {
+        background-color: #90030A;
+    }
+    .btn.btn-primary {
+        background-color: #B1040D;
+    }
+    .btn.btn-primary:hover {
+        background-color: #90030A;
+    }
+    .table-wrapper {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .row {
+        display: flex;
+        background-color: #f8f9fa;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #dee2e6;
+        flex-wrap: wrap;
+    }
+    .row.header {
+        background-color: #B1040D;
+        color: white;
+    }
+    .cell {
+        flex: 1 1 100%;
+        text-align: center;
+        font-size: 16px;
+        padding: 5px;
+    }
+    .add-order-icon {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 24px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+    }
+    .add-order-icon a {
+        color: white;
+        text-decoration: none;
+    }
+    @media (min-width: 600px) {
+        .row .cell {
+            flex: 1;
+        }
+    }
+</style>
+{% endblock %}
