@@ -6,27 +6,29 @@
 {% load order_tags %}
 
 <!-- Display form for adding/editing problem types -->
-<h2>{% if problem_form.instance.pk %}Edit Problem{% else %}Add Problem{% endif %}</h2>
+{% if user_role == 'ahd' or user_role == 'dit' %}
+<h2>{% if problem_to_edit %}Редактировать тип проблемы{% else %}Добавить тип проблемы{% endif %}</h2>
 <form method="post" action="{% url 'orders:manage_problems' %}">
     {% csrf_token %}
     {{ problem_form.as_p }}
-    <button type="submit">{% if problem_form.instance.pk %}Update{% else %}Add{% endif %} Problem</button>
-    {% if problem_form.instance.pk %}
-    <input type="hidden" name="problem_id" value="{{ problem_form.instance.pk }}">
+    <button type="submit">{% if problem_to_edit %}Обновить{% else %}Добавить{% endif %} тип проблемы</button>
+    {% if problem_to_edit %}
+    <input type="hidden" name="edit_problem" value="{{ problem_to_edit.id }}">
     {% endif %}
 </form>
+{% endif %}
 
 <!-- Display the list of existing problem types -->
-<h2>Existing Problem Types</h2>
+<h2>Список существующих типов проблем</h2>
 <ul>
     {% for problem in problems %}
     <li>
-        {{ problem.name }} ({{ problem.get_department_display }})
+        {{ problem.name }}
         <!-- Edit button -->
         {% if user_role == problem.department.lower %}
         <form method="post" action="{% url 'orders:manage_problems' %}" style="display:inline;">
             {% csrf_token %}
-            <button type="submit" name="edit_problem" value="{{ problem.id }}">Edit</button>
+            <button type="submit" name="edit_problem" value="{{ problem.id }}">Редактировать</button>
         </form>
         {% endif %}
     </li>

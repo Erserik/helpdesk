@@ -84,16 +84,16 @@
     <div class="dropdown">
         <a style="color: white">{{ request.user.username }}</a>
         <div class="dropdown-content">
-            <a href="{% url 'orders:my_orders' %}">My Orders</a>
-            <a href="{% url 'orders:active_orders' %}">Active Orders</a>
-            <a href="{% url 'orders:order_history' %}">Order History</a>
+            <a href="{% url 'orders:my_orders' %}">Мои заявки</a>
+            <a href="{% url 'orders:active_orders' %}">Активные заявки</a>
+            <a href="{% url 'orders:order_history' %}">История заявок</a>
             {% if request.user.role == 'head' %}
-            <a href="{% url 'orders:reports' %}">Reports</a>
+            <a href="{% url 'orders:reports' %}">Отчеты</a>
             {% endif %}
             {% if request.user.role == 'ahd' or request.user.role == 'dit' %}
-            <a href="{% url 'orders:manage_problems' %}">Settings</a>
+            <a href="{% url 'orders:manage_problems' %}">Настройки</a>
             {% endif %}
-            <a href="{% url 'accounts:logout' %}">Logout</a>
+            <a href="{% url 'accounts:logout' %}">Выйти</a>
         </div>
     </div>
 </div>

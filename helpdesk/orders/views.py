@@ -335,10 +335,11 @@ def manage_problems(request):
             problem_form = ProblemForm(request.POST, instance=problem_to_edit)
         else:
             problem_form = ProblemForm(request.POST)
-
-        if problem_form.is_valid():
-            problem_form.save()
-            return redirect('orders:manage_problems')  # Redirect to the same page after saving
+            if problem_form.is_valid():
+                new_problem = problem_form.save(commit=False)
+                new_problem.department = request.user.role.upper()
+                new_problem.save()
+                return redirect('orders:manage_problems')  # Redirect to the same page after saving
 
     return render(request, 'orders/settings.html', {
         'problems': problems,

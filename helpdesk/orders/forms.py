@@ -58,4 +58,4 @@ class ChatMessageForm(forms.ModelForm):
 class ProblemForm(forms.ModelForm):
     class Meta:
         model = Problem
-        fields = ['name', 'department']
+        fields = ['name']
