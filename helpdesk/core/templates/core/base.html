@@ -79,24 +79,27 @@
     {% block additional_styles %}{% endblock %}
 </head>
 <body>
-    <div class="topnav">
-        <a class="active" href="{% url 'orders:order_history' %}">IITU HELP DESK</a>
-        <div class="dropdown">
-            <a style="color: white">{{ request.user.username }}</a>
-            <div class="dropdown-content">
-                <a href="{% url 'orders:my_orders' %}">My Orders</a>
-                <a href="{% url 'orders:active_orders' %}">Active Orders</a>
-                <a href="{% url 'orders:order_history' %}">Order History</a>
-                {% if request.user.role == 'head' %}
-                    <a href="{% url 'orders:reports' %}">Reports</a>
-                {% endif %}
-                <a href="{% url 'accounts:logout' %}">Logout</a>
-            </div>
+<div class="topnav">
+    <a class="active" href="{% url 'orders:order_history' %}">IITU HELP DESK</a>
+    <div class="dropdown">
+        <a style="color: white">{{ request.user.username }}</a>
+        <div class="dropdown-content">
+            <a href="{% url 'orders:my_orders' %}">My Orders</a>
+            <a href="{% url 'orders:active_orders' %}">Active Orders</a>
+            <a href="{% url 'orders:order_history' %}">Order History</a>
+            {% if request.user.role == 'head' %}
+            <a href="{% url 'orders:reports' %}">Reports</a>
+            {% endif %}
+            {% if request.user.role == 'ahd' or request.user.role == 'dit' %}
+            <a href="{% url 'orders:manage_problems' %}">Settings</a>
+            {% endif %}
+            <a href="{% url 'accounts:logout' %}">Logout</a>
         </div>
     </div>
+</div>
 
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
 
-    {% block scripts %}{% endblock %}
+{% block scripts %}{% endblock %}
 </body>
 </html>
