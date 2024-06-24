@@ -58,9 +58,9 @@ class Order(models.Model):
 
 
     def add_comment_and_update_status(self, user, comment):
-        if user.role in ['ahd', 'dit']:  # Check if the user has the correct role
+        if user.role in ['ahd', 'dit']:
             self.comments = comment
-            self.status = 'freeze'  # Assuming you add this to your STATUS_CHOICES
+            self.status = 'freeze'
             self.save()
 
     def __str__(self):

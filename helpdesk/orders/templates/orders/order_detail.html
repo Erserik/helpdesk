@@ -1,6 +1,6 @@
 {% extends "core/base.html" %}
 
-{% block title %}Детали заявки{% endblock %}
+{% block title %}Order Details{% endblock %}
 
 {% block content %}
 {% load order_tags %}
@@ -41,11 +41,12 @@
                     <p class="detail-title">Комментарий:</p>
                     <p class="detail-value">{{ order.comments }}</p>
                 </div>
+                    {% endif %}
                 <div class="detail">
                     <p class="detail-title">Статус:</p>
-                    {% if can_modify_status %}
-                    <a href="#" class="btn-link" data-toggle="modal" data-target="#statusModal">
-                        <p class="detail-value accepted">{{ order.get_status_display }} <i class="fas fa-edit"></i></p>
+                    {% if can_modify %}
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#statusModal">
+                        <button class="btn btn-outline-success">{{ order.get_status_display }} <i class="fas fa-edit"></i></button>
                     </a>
                     {% else %}
                     <p class="detail-value accepted">{{ order.get_status_display }}</p>
@@ -53,15 +54,15 @@
                 </div>
                 <div class="detail">
                     <p class="detail-title">Исполнитель:</p>
-                    {% if can_modify_status %}
-                    <a href="#" class="btn-link" data-toggle="modal" data-target="#executorModal">
-                        <p class="detail-value">{{ order.executor }} <i class="fas fa-user-edit"></i></p>
+                    {% if can_modify %}
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#executorModal">
+                        <button class="btn btn-outline-primary">{{ order.executor }} <i class="fas fa-user-edit"></i></button>
                     </a>
                     {% else %}
                     <p class="detail-value">{{ order.executor }}</p>
                     {% endif %}
                 </div>
-                {% endif %}
+
                 {% if order.document %}
                 <div class="detail">
                     <p class="detail-title">Скачать документ:</p>
@@ -69,8 +70,7 @@
                 </div>
                 {% endif %}
                 <div class="text-center">
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#chatBox"
-                            aria-expanded="false" aria-controls="chatBox">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#chatBox" aria-expanded="false" aria-controls="chatBox">
                         ЧАТ
                     </button>
                 </div>
@@ -91,8 +91,7 @@
                     <form id="chat-form" method="post" action="{% url 'orders:send_message' order.pk %}">
                         {% csrf_token %}
                         <div class="form-group">
-                            <textarea name="message" id="chat-message" class="form-control"
-                                      placeholder="Type a message"></textarea>
+                            <textarea name="message" id="chat-message" class="form-control" placeholder="Type a message"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
@@ -103,8 +102,7 @@
 </div>
 
 <!-- Modals -->
-<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,22 +115,22 @@
                 <form method="post" class="form-group">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="id_status">Change Status:</label>
+                        <label for="id_status">Изменить статус на:</label>
                         <select name="status" id="id_status" class="form-control" style="height: 3em;">
                             {% for choice in form.fields.status.choices %}
-                            <option value="{{ choice.0 }}" {% if order.status== choice.0 %}selected{% endif %}>
+                            <option value="{{ choice.0 }}" {% if order.status == choice.0 %}selected{% endif %}>
                                 {{ choice.1 }}
                             </option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id_comment">Коментарий:</label>
+                        <label for="id_comment">Комментарий:</label>
                         <textarea name="comment" id="id_comment" class="form-control">{% if form.fields.comment.value %}{{ form.fields.comment.value }}{% endif %}</textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update Status</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Обновить Статус</button>
                     </div>
                 </form>
             </div>
@@ -140,8 +138,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="executorModal" tabindex="-1" role="dialog" aria-labelledby="executorModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="executorModal" tabindex="-1" role="dialog" aria-labelledby="executorModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,8 +152,8 @@
                     {% csrf_token %}
                     {{ reassignment_form.as_p }}
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Reassign</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Переназначить</button>
                     </div>
                 </form>
             </div>
@@ -164,11 +161,11 @@
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
-
     .order-details-box {
         background-color: #ffffff;
         border: 2px solid red;

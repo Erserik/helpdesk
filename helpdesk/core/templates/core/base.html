@@ -82,7 +82,7 @@
     <div class="topnav">
         <a class="active" href="{% url 'orders:order_history' %}">IITU HELP DESK</a>
         <div class="dropdown">
-            <a>{{ request.user.username }}</a>
+            <a style="color: white">{{ request.user.username }}</a>
             <div class="dropdown-content">
                 <a href="{% url 'orders:my_orders' %}">My Orders</a>
                 <a href="{% url 'orders:active_orders' %}">Active Orders</a>

@@ -10,14 +10,16 @@ class OrderProfileForm(forms.ModelForm):
         fields = ['building', 'room_number', 'problem_type', 'description', 'document']
 
 
-from django import forms
-from django.utils import timezone
-
 class OrderStatusUpdateForm(forms.Form):
-    STATUS_CHOICES = Order.STATUS_CHOICES
+    STATUS_CHOICES = [
+        ('accepted', 'Принято'),
+        ('in_progress', 'В процессе'),
+        ('completed', 'Завершено'),
+        ('freeze', 'Заморожен')
+    ]
     status = forms.ChoiceField(choices=STATUS_CHOICES)
     comment = forms.CharField(widget=forms.Textarea, required=False)
-    timestamp = forms.DateTimeField(initial=timezone.now, required=False)
+
 
 from django import forms
 
@@ -26,6 +28,9 @@ class OrderReassignmentForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['executor']
+        labels = {
+            'executor': 'Исполнитель',
+        }
 
     def __init__(self, *args, **kwargs):
         order = kwargs.pop('order', None)
