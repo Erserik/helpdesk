@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% block title %}Manage Problems{% endblock %}
+
+{% block content %}
+{% load order_tags %}
+
+<!-- Display form for adding/editing problem types -->
+<h2>{% if problem_form.instance.pk %}Edit Problem{% else %}Add Problem{% endif %}</h2>
+<form method="post" action="{% url 'orders:manage_problems' %}">
+    {% csrf_token %}
+    {{ problem_form.as_p }}
+    <button type="submit">{% if problem_form.instance.pk %}Update{% else %}Add{% endif %} Problem</button>
+    {% if problem_form.instance.pk %}
+    <input type="hidden" name="problem_id" value="{{ problem_form.instance.pk }}">
+    {% endif %}
+</form>
+
+<!-- Display the list of existing problem types -->
+<h2>Existing Problem Types</h2>
+<ul>
+    {% for problem in problems %}
+    <li>
+        {{ problem.name }} ({{ problem.get_department_display }})
+        <!-- Edit button -->
+        {% if user_role == problem.department.lower %}
+        <form method="post" action="{% url 'orders:manage_problems' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" name="edit_problem" value="{{ problem.id }}">Edit</button>
+        </form>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
