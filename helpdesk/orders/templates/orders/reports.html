@@ -11,9 +11,8 @@
             <select name="problem_type" id="problem_type">
                 <option value="">Все типы</option>
                 {% for type in problem_types %}
-                <option value="{{ type.id }}" {% if type.id== request.GET.problem_type %}selected{% endif %}>{{
-                    type.name }}
-                </option>
+                <option value="{{ type.id }}" {% if type.id|stringformat:"s" == request.GET.problem_type %}selected{% endif %}>{{ type.name }}</option>
+
                 {% endfor %}
             </select>
 
@@ -27,9 +26,10 @@
             <select name="executor" id="executor">
                 <option value="">Все исполнители</option>
                 {% for executor in executors %}
-                <option value="{{ executor.id }}" {% if executor.id== request.GET.executor %}selected{% endif %}>{{
-                    executor.username }}
-                </option>
+                <option value="{{ executor.id }}" {% if executor.id == request.GET.executor|stringformat:"s" %}selected{% endif %}>{{ executor.username }}</option>
+
+<option value="{{ key }}" {% if key == request.GET.building|stringformat:"s" %} selected {% endif %}>{{ value }}</option>
+
                 {% endfor %}
             </select>
 
@@ -37,7 +37,7 @@
             <select name="building" id="building">
                 <option value="">Все здания</option>
                 {% for key, value in buildings.items %}
-                <option value="{{ key }}" {% if key== request.GET.building %} selected {% endif %}>{{ value }}</option>
+<option value="{{ key }}" {% if key|stringformat:"s" == request.GET.building %} selected {% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
 

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from openpyxl.workbook import Workbook
+from django.db.models import Q
 
 from accounts.models import CustomUser
 from .forms import OrderProfileForm, OrderReassignmentForm, OrderStatusUpdateForm, ChatMessageForm, ProblemForm
@@ -183,7 +184,10 @@ def active_orders(request):
 
 @login_required
 def my_orders(request):
-    orders = Order.objects.filter(executor=request.user).order_by('-created_at')
+    user = request.user
+    # Fetch orders where the user is either the creator or the executor.
+    orders = Order.objects.filter(Q(user=user) | Q(executor=user)).order_by('-created_at')
+
     return render(request, 'orders/my_orders.html', {'orders': orders})
 
 

@@ -28,9 +28,8 @@
                 </select>
             </div>
         </form>
-        <!-- Display orders in a table -->
         <div class="table-wrapper">
-            <div class="row">
+            <div class="row header-row">
                 <div class="cell"><p>ID</p></div>
                 <div class="cell"><p>Отправитель</p></div>
                 <div class="cell"><p>Корпус</p></div>
@@ -49,96 +48,106 @@
                 <div class="cell"><p>{{ order.problem_type }}</p></div>
                 <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
                 <div class="cell"><p>{{ order.get_status_display }}</p></div>
-                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}">Подробнее</a></div>
+                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}" class="details-button">Подробнее</a></div>
             </div>
             {% empty %}
             <div class="row">
-                <div class="cell" colspan="7">Нету активных заявок</div>
+                <div class="cell" colspan="8"><p>Нет активных заявок</p></div>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        padding: 0;
-        margin: 0;
-        background-color: #E8E8E8;
-        font-weight: bold;
-    }
-    .topnav {
-        background-color: #B1040D;
-        width: 100%;
-        height: 5em;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .topnav a {
-        color: #ffffff;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 20px;
-    }
     .claim-box {
         display: flex;
         justify-content: center;
-        margin-top: 100px;
+        margin-top: 30px;
     }
-    .claim-button {
-        width: 90%;
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-    }
+
     .table-container {
-        width: 100%;
+        width: 95%;
+        margin: auto;
         padding: 20px;
-        background-color: #f8f9fa;
+        background-color: #fafafa;
         border-radius: 10px;
+        border: 1px solid #ddd;
     }
+
     .filter-form {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 2px solid #ddd;
         margin-bottom: 20px;
     }
+
     .form-group {
         display: flex;
         flex-direction: column;
+        width: 20%;
     }
+
     .form-select {
         padding: 8px;
         border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
+        border: 2px solid #B1040E;
+        background-color: #fff;
     }
-    .submit-button {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .submit-button:hover {
-        background-color: #45a049;
-    }
+
     .table-wrapper {
-        border-radius: 10px;
-        overflow: hidden;
+        overflow-x: auto; /* Allows horizontal scrolling if needed */
     }
-    .row {
+
+    .row.header-row, .row {
         display: flex;
-        background-color: #eee;
+        background-color: #fff;
         padding: 10px;
-        margin-bottom: 5px;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
     }
+
+    .row.header-row {
+        background-color: #B1040E;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
     .cell {
-        flex: 1;
         text-align: center;
-        font-size: 16px;
+        padding: 10px;
+        border-right: 1px solid #ddd;
+        flex-grow: 1;
+        min-width: 100px; /* Ensure each cell has a minimum width */
+    }
+
+    .cell:last-child {
+        border-right: none;
+    }
+
+    /* Adjust cell widths to better match content needs */
+    .cell:nth-child(1) { width: 5%; }  /* ID */
+    .cell:nth-child(2) { width: 15%; } /* Отправитель */
+    .cell:nth-child(3) { width: 10%; } /* Корпус */
+    .cell:nth-child(4) { width: 10%; } /* Дата */
+    .cell:nth-child(5) { width: 20%; } /* Тип проблемы */
+    .cell:nth-child(6) { width: 10%; } /* Срочность */
+    .cell:nth-child(7) { width: 10%; } /* Статус */
+    .cell:nth-child(8) { width: 20%; } /* Подробнее */
+
+
+    .details-button {
+        padding: 8px 16px;
+        background-color: #B1040D;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .details-button:hover {
+        background-color: #D1160C;
     }
 </style>
+
 {% endblock %}
