@@ -41,10 +41,10 @@
                     <p class="detail-title">Комментарий:</p>
                     <p class="detail-value">{{ order.comments }}</p>
                 </div>
-                    {% endif %}
+                {% endif %}
                 <div class="detail">
                     <p class="detail-title">Статус:</p>
-                    {% if can_modify %}
+                    {% if can_modify_status %}
                     <a href="#" class="btn btn-link" data-toggle="modal" data-target="#statusModal">
                         <button class="btn btn-outline-success">{{ order.get_status_display }} <i class="fas fa-edit"></i></button>
                     </a>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="detail">
                     <p class="detail-title">Исполнитель:</p>
-                    {% if can_modify %}
+                    {% if can_modify_executor %}
                     <a href="#" class="btn btn-link" data-toggle="modal" data-target="#executorModal">
                         <button class="btn btn-outline-primary">{{ order.executor }} <i class="fas fa-user-edit"></i></button>
                     </a>
@@ -62,7 +62,6 @@
                     <p class="detail-value">{{ order.executor }}</p>
                     {% endif %}
                 </div>
-
                 {% if order.document %}
                 <div class="detail">
                     <p class="detail-title">Скачать документ:</p>
@@ -168,7 +167,6 @@
 <style>
     .order-details-box {
         background-color: #ffffff;
-        border: 2px solid red;
         border-radius: 15px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         padding: 20px;

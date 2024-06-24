@@ -48,12 +48,12 @@ def submit_order(request):
 @login_required
 def order_detail(request, pk):
     order = get_object_or_404(Order, pk=pk)
-    print(request.user.role.lower())
-    print(order.problem_type.department.lower())
-    can_modify = request.user.role.lower() == order.problem_type.department.lower()
-    print(can_modify)
 
-    form, reassignment_form, message_form = 0, 0, 0
+    # Check if the user's role matches the department of the problem type or if the user is the creator
+    can_modify_status = request.user.role.lower() == order.problem_type.department.lower() or request.user == order.user
+    can_modify_executor = request.user.role.lower() == order.problem_type.department.lower()
+
+    form, reassignment_form, message_form = None, None, None
     if request.method == 'POST':
         if 'status' in request.POST:
             form = OrderStatusUpdateForm(request.POST)
@@ -88,7 +88,8 @@ def order_detail(request, pk):
         'reassignment_form': reassignment_form,
         'message_form': message_form,
         'chat_messages': chat_messages,
-        'can_modify': can_modify,
+        'can_modify_status': can_modify_status,
+        'can_modify_executor': can_modify_executor,
     })
 
 
