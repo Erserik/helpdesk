@@ -1,7 +1,7 @@
 from django import forms
 
 from accounts.models import CustomUser
-from .models import Order, ChatMessage
+from .models import Order, ChatMessage, Problem
 
 
 class OrderProfileForm(forms.ModelForm):
@@ -53,3 +53,9 @@ class ChatMessageForm(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': 2}),
         }
+
+
+class ProblemForm(forms.ModelForm):
+    class Meta:
+        model = Problem
+        fields = ['name', 'department']

@@ -6,7 +6,7 @@ from django.utils.dateparse import parse_date
 from openpyxl.workbook import Workbook
 
 from accounts.models import CustomUser
-from .forms import OrderProfileForm, OrderReassignmentForm, OrderStatusUpdateForm, ChatMessageForm
+from .forms import OrderProfileForm, OrderReassignmentForm, OrderStatusUpdateForm, ChatMessageForm, ProblemForm
 from .models import Order, Problem, ChatMessage
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
@@ -197,7 +197,7 @@ def update_order_status(request, pk):
                 status = form.cleaned_data['status']
                 comment = form.cleaned_data['comment']
                 timestamp = form.cleaned_data['timestamp'] or timezone.now()
-                
+
                 order.status = status
                 order.comment = comment
                 order.updated_at = timestamp  # Update the general update timestamp
@@ -211,6 +211,7 @@ def update_order_status(request, pk):
         return render(request, 'orders/update_order_status.html', {'form': form, 'order': order})
     else:
         return render(request, 'orders/order_detail.html', {'order': order, 'error': 'Unauthorized action'})
+
 
 @login_required
 def reports(request):
@@ -245,7 +246,8 @@ def reports(request):
         ws = wb.active
         ws.title = 'Completed Orders Report'
 
-        headers = ['Order ID', 'Building', 'Room Number', 'Sender', 'Executor', 'Status', 'Urgency', 'Problem Type', 'Description', 'Completed At']
+        headers = ['Order ID', 'Building', 'Room Number', 'Sender', 'Executor', 'Status', 'Urgency', 'Problem Type',
+                   'Description', 'Completed At']
         ws.append(headers)
 
         for order in orders:
@@ -279,6 +281,8 @@ def reports(request):
         'executors': executors,
         'buildings': buildings
     })
+
+
 @login_required
 def download_order_report(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
@@ -313,3 +317,32 @@ def download_order_report(request, order_id):
     response['Content-Disposition'] = f'attachment; filename="order_{order.id}_report.xlsx"'
     wb.save(response)
     return response
+
+
+@login_required
+def manage_problems(request):
+    if request.user.role not in ['ahd', 'dit']:
+        return redirect('orders:order_history')  # Redirect if user is not in the correct role
+
+    problems = Problem.objects.filter(department=request.user.role.upper())
+    problem_form = ProblemForm(request.POST or None)
+    problem_to_edit = None
+
+    if request.method == 'POST':
+        if 'edit_problem' in request.POST:
+            problem_id = request.POST.get('edit_problem')
+            problem_to_edit = get_object_or_404(Problem, id=problem_id)
+            problem_form = ProblemForm(request.POST, instance=problem_to_edit)
+        else:
+            problem_form = ProblemForm(request.POST)
+
+        if problem_form.is_valid():
+            problem_form.save()
+            return redirect('orders:manage_problems')  # Redirect to the same page after saving
+
+    return render(request, 'orders/settings.html', {
+        'problems': problems,
+        'problem_form': problem_form,
+        'problem_to_edit': problem_to_edit,
+        'user_role': request.user.role
+    })
