@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load custom_filters %}
 
 {% block title %}Order Details{% endblock %}
 
@@ -7,95 +8,90 @@
 <link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="order-details-box">
-                <h2>Детали заявки</h2>
-                <div class="detail">
-                    <p class="detail-title">Отправитель:</p>
-                    <p class="detail-value">{{ order.user.username }}</p>
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Здание:</p>
-                    <p class="detail-value">{{ order.get_building_display }}</p>
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Дата создания:</p>
-                    <p class="detail-value">{{ order.created_at|date:"d M Y" }}</p>
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Тип проблемы:</p>
-                    <p class="detail-value">{{ order.problem_type }}</p>
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Описание:</p>
-                    <p class="detail-value">{{ order.description }}</p>
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Срочность:</p>
-                    <p class="detail-value">{{ order.get_urgency_display }}</p>
-                </div>
-                {% if order.comments %}
-                <div class="detail">
-                    <p class="detail-title">Комментарий:</p>
-                    <p class="detail-value">{{ order.comments }}</p>
-                </div>
-                {% endif %}
-                <div class="detail">
-                    <p class="detail-title">Статус:</p>
-                    {% if can_modify_status %}
-                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#statusModal">
-                        <button class="btn btn-outline-success">{{ order.get_status_display }} <i class="fas fa-edit"></i></button>
-                    </a>
-                    {% else %}
-                    <p class="detail-value accepted">{{ order.get_status_display }}</p>
-                    {% endif %}
-                </div>
-                <div class="detail">
-                    <p class="detail-title">Исполнитель:</p>
-                    {% if can_modify_executor %}
-                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#executorModal">
-                        <button class="btn btn-outline-primary">{{ order.executor }} <i class="fas fa-user-edit"></i></button>
-                    </a>
-                    {% else %}
-                    <p class="detail-value">{{ order.executor }}</p>
-                    {% endif %}
-                </div>
-                {% if order.document %}
-                <div class="detail">
-                    <p class="detail-title">Скачать документ:</p>
-                    <p class="detail-value"><a href="{{ order.document.url }}" download>Download Document</a></p>
-                </div>
-                {% endif %}
-                <div class="text-center">
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#chatBox" aria-expanded="false" aria-controls="chatBox">
-                        ЧАТ
-                    </button>
-                </div>
-            </div>
+<div class="container mt-5">
+    <div class="order-details-box p-5 rounded shadow">
+        <h2 class="text-center mb-4">Детали заявки</h2>
+        <div class="detail mb-3">
+            <p class="detail-title">Отправитель:</p>
+            <p class="detail-value">{{ order.user.username }}</p>
         </div>
-        <div class="col-md-12">
-            <div class="collapse mt-3" id="chatBox">
-                <div class="chat-box">
-                    <h3>Chat</h3>
-                    <div class="chat-messages" id="chat-messages">
-                        {% for message in chat_messages %}
-                        <div class="chat-message">
-                            <span class="message-user">{{ message.user.username }}:</span>
-                            <span class="message-text">{{ message.message }}</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <form id="chat-form" method="post" action="{% url 'orders:send_message' order.pk %}">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <textarea name="message" id="chat-message" class="form-control" placeholder="Type a message"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
+        <div class="detail mb-3">
+            <p class="detail-title">Здание:</p>
+            <p class="detail-value">{{ order.get_building_display }}</p>
+        </div>
+        <div class="detail mb-3">
+            <p class="detail-title">Дата создания:</p>
+            <p class="detail-value">{{ order.created_at|date:"d M Y" }}</p>
+        </div>
+        <div class="detail mb-3">
+            <p class="detail-title">Тип проблемы:</p>
+            <p class="detail-value">{{ order.problem_type }}</p>
+        </div>
+        <div class="detail mb-3">
+            <p class="detail-title">Описание:</p>
+            <p class="detail-value">{{ order.description }}</p>
+        </div>
+        <div class="detail mb-3">
+            <p class="detail-title">Срочность:</p>
+            <p class="detail-value">{{ order.get_urgency_display }}</p>
+        </div>
+        {% if order.comments %}
+        <div class="detail mb-3">
+            <p class="detail-title">Комментарий:</p>
+            <p class="detail-value">{{ order.comments }}</p>
+        </div>
+        {% endif %}
+        <div class="detail mb-3">
+            <p class="detail-title">Статус:</p>
+            {% if can_modify_status %}
+            <a href="#" class="btn btn-link p-0" data-toggle="modal" data-target="#statusModal">
+                <button class="btn custom-button status-button">{{ order.get_status_display }} <i class="fas fa-edit"></i></button>
+            </a>
+            {% else %}
+            <p class="detail-value accepted">{{ order.get_status_display }}</p>
+            {% endif %}
+        </div>
+        <div class="detail mb-3">
+            <p class="detail-title">Исполнитель:</p>
+            {% if can_modify_executor %}
+            <a href="#" class="btn btn-link p-0" data-toggle="modal" data-target="#executorModal">
+                <button class="btn custom-button executor-button">{{ order.executor }} <i class="fas fa-user-edit"></i></button>
+            </a>
+            {% else %}
+            <p class="detail-value">{{ order.executor }}</p>
+            {% endif %}
+        </div>
+        {% if order.document %}
+        <div class="detail mb-3">
+            <p class="detail-title">Скачать документ:</p>
+            <p class="detail-value"><a href="{{ order.document.url }}" download class="btn btn-download custom-button">Download Document</a></p>
+        </div>
+        {% endif %}
+        <div class="text-center mt-4">
+            <button class="btn btn-chat custom-button" type="button" data-toggle="collapse" data-target="#chatBox" aria-expanded="false" aria-controls="chatBox">
+                ЧАТ
+            </button>
+        </div>
+    </div>
+
+    <div class="collapse mt-4" id="chatBox">
+        <div class="chat-box p-4 rounded shadow">
+            <h3 class="text-center mb-4">Chat</h3>
+            <div class="chat-messages" id="chat-messages">
+                {% for message in chat_messages %}
+                <div class="chat-message mb-2">
+                    <span class="message-user font-weight-bold">{{ message.user.username }}:</span>
+                    <span class="message-text">{{ message.message }}</span>
                 </div>
+                {% endfor %}
             </div>
+            <form id="chat-form" method="post" action="{% url 'orders:send_message' order.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="message" id="chat-message" class="form-control" placeholder="Type a message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary custom-button">Send</button>
+            </form>
         </div>
     </div>
 </div>
@@ -115,7 +111,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_status">Изменить статус на:</label>
-                        <select name="status" id="id_status" class="form-control" style="height: 3em;">
+                        <select name="status" id="id_status" class="form-control" style="height: 3em">
                             {% for choice in form.fields.status.choices %}
                             <option value="{{ choice.0 }}" {% if order.status == choice.0 %}selected{% endif %}>
                                 {{ choice.1 }}
@@ -129,7 +125,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Обновить Статус</button>
+                        <button type="submit" class="btn btn-primary custom-button">Обновить Статус</button>
                     </div>
                 </form>
             </div>
@@ -149,17 +145,19 @@
             <div class="modal-body">
                 <form method="post" class="form-group">
                     {% csrf_token %}
-                    {{ reassignment_form.as_p }}
+                    <div class="form-group">
+                        <label for="executor">Выберите исполнителя:</label>
+                        {{ reassignment_form.executor|add_class:"custom-select" }}
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Переназначить</button>
+                        <button type="button" class="btn btn-secondary custom-button" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary custom-button">Переназначить</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -174,40 +172,27 @@
     }
 
     .order-details-box h2 {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
         margin-bottom: 20px;
+        color: black;
     }
 
     .detail {
         display: flex;
-        text-align: left;
-        margin-bottom: 20px;
-        font-size: 20px;
+        margin-bottom: 15px;
+        font-size: 18px;
     }
 
     .detail-title {
-        width: 150px;
+        width: 200px;
         font-weight: bold;
+        color: black;
     }
 
     .detail-value {
         flex: 1;
-        text-align: left;
-        font-size: 20px;
-    }
-
-    .label {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-
-    .value {
         color: #333;
-    }
-
-    .status {
-        color: green;
     }
 
     .status.not-accepted {
@@ -218,11 +203,90 @@
         color: rgb(9, 229, 53);
     }
 
-    #bold {
+    .btn-link {
+        padding: 0;
+        border: none;
+        background: none;
+        text-decoration: none;
+    }
+
+    .btn-link .btn {
+        font-size: 16px;
+    }
+
+    .details-button {
+        padding: 8px 16px;
+        background-color: #B1040D;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
         font-weight: bold;
     }
 
-    /* Custom modal styles */
+    .details-button:hover {
+        background-color: #D1160C;
+    }
+
+    .btn-chat {
+        background-color: #B1040D;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    .btn-chat:hover {
+        background-color: #D1160C;
+    }
+
+    .btn-download {
+        background-color: #B1040D;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    .btn-download:hover {
+        background-color: #D1160C;
+    }
+
+    .custom-button {
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+
+    .status-button {
+        background-color: #B1040D;
+        border: none;
+        color: white;
+    }
+
+    .status-button:hover {
+        background-color: #D1160C;
+    }
+
+    .executor-button {
+        background-color: #B1040D;
+        border: none;
+        color: white;
+    }
+
+    .executor-button:hover {
+        background-color: #D1160C;
+    }
+
     .modal-content {
         background-color: #f8f9fa;
         border-radius: 15px;
@@ -280,14 +344,12 @@
     }
 
     .modal-footer .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: #B1040D;
+        border-color: #B1040D;
     }
 
-    /* Chat box styles */
     .chat-box {
         background-color: #ffffff;
-        border: 2px solid green;
         border-radius: 15px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         padding: 20px;
@@ -298,6 +360,7 @@
         font-size: 24px;
         font-weight: bold;
         margin-bottom: 20px;
+        color: #B1040D;
     }
 
     .chat-messages {
@@ -331,6 +394,35 @@
     #chat-form button {
         border-radius: 20px;
         padding: 10px 20px;
+    }
+
+    .custom-select {
+        background-color: #fff;
+        border: 2px solid #B1040D;
+        color: #333;
+        padding: 8px;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+        height: 3em;
+    }
+
+    .custom-select:focus {
+        border-color: #D1160C;
+        box-shadow: 0 0 5px rgba(209, 22, 12, 0.5);
+        outline: none;
+    }
+
+    .custom-button {
+        background-color: #B1040D;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-button:hover {
+        background-color: #D1160C;
     }
 </style>
 {% endblock %}
