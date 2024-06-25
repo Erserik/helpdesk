@@ -19,11 +19,11 @@
             </div>
             <div class="form-group">
                 <label for="start_date">Начало:</label>
-                <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-select">
+                <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-input">
             </div>
             <div class="form-group">
                 <label for="end_date">Конец:</label>
-                <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-select">
+                <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-input">
             </div>
             <div class="form-group">
                 <label for="executor">Исполнитель:</label>
@@ -100,6 +100,7 @@
     .filter-form {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         padding: 10px;
         border-bottom: 2px solid #ddd;
         margin-bottom: 20px;
@@ -108,14 +109,29 @@
     .form-group {
         display: flex;
         flex-direction: column;
-        width: 20%;
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 10px;
     }
 
-    .form-select {
-        padding: 8px;
+    .form-group label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-select, .form-input {
+        padding: 10px;
         border-radius: 5px;
         border: 2px solid #B1040D;
         background-color: #fff;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-select:focus, .form-input:focus {
+        border-color: #D1160C;
     }
 
     .table-wrapper {
