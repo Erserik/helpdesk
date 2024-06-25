@@ -22,9 +22,20 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
 
+
 def logout_view(request):
+    # Logout the user to clear the user's session
     logout(request)
-    return redirect('MicrosoftLogin')
+
+    # Clear all cookies used for the session
+    response = HttpResponseRedirect('MicrosoftLogin')
+    response.delete_cookie('sessionid')  # Adjust as necessary for your cookies' names
+
+    # You can also clear other site-specific cookies if you set any
+    # response.delete_cookie('cookie_name')
+
+    # Redirect to login page or wherever you want
+    return response
 
 def microsoft_login_url():
     """Создание URL для входа через Microsoft для перенаправления пользователя."""
