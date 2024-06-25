@@ -18,14 +18,25 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="status">Статус:</label>
-                <select name="status" id="status" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все</option>
-                    <option value="submitted" {% if status == 'submitted' %}selected{% endif %}>Отправлено</option>
-                    <option value="accepted" {% if status == 'accepted' %}selected{% endif %}>Принято</option>
-                    <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>В процессе</option>
-                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Завершено</option>
-                </select>
+                <label>Статус:</label>
+                <div class="checkbox-group">
+                    <label for="submitted">
+                        <input type="checkbox" name="status" value="submitted" id="submitted" {% if 'submitted' in status %}checked{% endif %}>
+                        Отправлено
+                    </label>
+                    <label for="accepted">
+                        <input type="checkbox" name="status" value="accepted" id="accepted" {% if 'accepted' in status %}checked{% endif %}>
+                        Принято
+                    </label>
+                    <label for="in_progress">
+                        <input type="checkbox" name="status" value="in_progress" id="in_progress" {% if 'in_progress' in status %}checked{% endif %}>
+                        В процессе
+                    </label>
+                    <label for="completed">
+                        <input type="checkbox" name="status" value="completed" id="completed" {% if 'completed' in status %}checked{% endif %}>
+                        Завершено
+                    </label>
+                </div>
             </div>
         </form>
         <div class="table-wrapper">
@@ -85,7 +96,12 @@
     .form-group {
         display: flex;
         flex-direction: column;
-        width: 20%;
+        width: 45%;
+    }
+
+    .checkbox-group {
+        display: flex;
+        justify-content: space-around;
     }
 
     .form-select {
