@@ -4,35 +4,114 @@
 
 {% block content %}
 {% load order_tags %}
+{% load widget_tweaks %}
 
-<!-- Display form for adding/editing problem types -->
-{% if user_role == 'ahd' or user_role == 'dit' %}
-<h2>{% if problem_to_edit %}Редактировать тип проблемы{% else %}Добавить тип проблемы{% endif %}</h2>
-<form method="post" action="{% url 'orders:manage_problems' %}">
-    {% csrf_token %}
-    {{ problem_form.as_p }}
-    <button type="submit">{% if problem_to_edit %}Обновить{% else %}Добавить{% endif %} тип проблемы</button>
-    {% if problem_to_edit %}
-    <input type="hidden" name="edit_problem" value="{{ problem_to_edit.id }}">
-    {% endif %}
-</form>
-{% endif %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
 
-<!-- Display the list of existing problem types -->
-<h2>Список существующих типов проблем</h2>
-<ul>
-    {% for problem in problems %}
-    <li>
-        {{ problem.name }}
-        <!-- Edit button -->
-        {% if user_role == problem.department.lower %}
-        <form method="post" action="{% url 'orders:manage_problems' %}" style="display:inline;">
+<div class="claim-box">
+    <div class="table-container">
+        <!-- Display form for adding/editing problem types -->
+        {% if user_role == 'ahd' or user_role == 'dit' %}
+        <h2>{% if problem_to_edit %}Редактировать тип проблемы{% else %}Добавить тип проблемы{% endif %}</h2>
+        <form method="post" action="{% url 'orders:manage_problems' %}" class="filter-form">
             {% csrf_token %}
-            <button type="submit" name="edit_problem" value="{{ problem.id }}">Редактировать</button>
+            <div class="form-group">
+                {{ problem_form.name.label_tag }}
+                {{ problem_form.name|add_class:'form-input' }}
+            </div>
+            <button type="submit" class="details-button">{% if problem_to_edit %}Обновить{% else %}Добавить{% endif %}</button>
+            {% if problem_to_edit %}
+            <input type="hidden" name="edit_problem" value="{{ problem_to_edit.id }}">
+            {% endif %}
         </form>
         {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+
+        <!-- Display the list of existing problem types -->
+        <h2>Список существующих типов проблем</h2>
+        <ul class="problem-list">
+            {% for problem in problems %}
+            <li>
+                {{ problem.name }}
+                <!-- Edit button -->
+                {% if user_role == problem.department.lower %}
+                <form method="post" action="{% url 'orders:manage_problems' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" name="edit_problem" value="{{ problem.id }}" class="details-button">Редактировать</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<style>
+    .claim-box {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .table-container {
+        width: 50%;
+        margin: auto;
+        padding: 20px;
+        background-color: #fafafa;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-input, .form-select {
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 2px solid #B1040D;
+        background-color: #fff;
+        font-size: 16px;
+    }
+
+    .details-button {
+        background-color: #B1040D;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .details-button:hover {
+        background-color: #D1160C;
+    }
+
+    .problem-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .problem-list li {
+        background: #f9f9f9;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
 
 {% endblock %}
