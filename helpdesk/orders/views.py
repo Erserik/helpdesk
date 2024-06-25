@@ -185,10 +185,24 @@ def active_orders(request):
 @login_required
 def my_orders(request):
     user = request.user
-    # Fetch orders where the user is either the creator or the executor.
-    orders = Order.objects.filter(Q(user=user) | Q(executor=user)).order_by('-created_at')
+    urgency = request.GET.get('urgency', '')
+    statuses = request.GET.getlist('status')
 
-    return render(request, 'orders/my_orders.html', {'orders': orders})
+    orders = Order.objects.filter(Q(user=user) | Q(executor=user))
+
+    if urgency:
+        orders = orders.filter(urgency=urgency)
+
+    if statuses:
+        orders = orders.filter(status__in=statuses)
+
+    orders = orders.order_by('-created_at')
+
+    return render(request, 'orders/my_orders.html', {
+        'orders': orders,
+        'urgency': urgency,
+        'status': statuses
+    })
 
 
 @login_required
