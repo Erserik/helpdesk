@@ -55,6 +55,11 @@
                 <div class="cell" colspan="8"><p>Нет записей</p></div>
             </div>
             {% endfor %}
+            <div class="submit-order-button">
+            <a href="{% url 'orders:submit_order' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
         </div>
     </div>
 </div>
