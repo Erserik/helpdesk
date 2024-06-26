@@ -12,7 +12,7 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('microsoft/', include('microsoft.urls')),
     path('accounts/', include('accounts.urls')),
-    path('login/', MicrosoftLoginView, name="MicrosoftLogin"),
+    path('login/', MicrosoftLoginView.as_view(), name="MicrosoftLogin"),
 ]
 
 if settings.DEBUG:
