@@ -7,12 +7,12 @@ from accounts.views import MicrosoftLoginView, MicrosoftLogin
 app_name = "main"
 
 urlpatterns = [
-    path('', MicrosoftLoginView.as_view(), name="home"),
+    path('', MicrosoftLogin, name="home"),
     path('admin/', admin.site.urls),
     path('orders/', include('orders.urls')),
     path('microsoft/', include('microsoft.urls')),
     path('accounts/', include('accounts.urls')),
-    path('login/', MicrosoftLogin, name="MicrosoftLogin"),
+    path('login/', MicrosoftLoginView, name="MicrosoftLogin"),
 ]
 
 if settings.DEBUG:
