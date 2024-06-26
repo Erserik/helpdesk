@@ -23,18 +23,21 @@ def login_view(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+
 def logout_view(request):
     # Logout the user to clear the user's session
     logout(request)
 
     # Clear all cookies used for the session
-    response = HttpResponseRedirect('home')
+    response = HttpResponseRedirect('/')
     response.delete_cookie('sessionid')  # Adjust as necessary for your cookies' names
 
     # You can also clear other site-specific cookies if you set any
     # response.delete_cookie('cookie_name')
 
-    # Redirect to login page or wherever you want
+    # Redirect to the home page
     return response
 
 def microsoft_login_url():
