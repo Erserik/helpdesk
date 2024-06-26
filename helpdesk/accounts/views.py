@@ -31,7 +31,7 @@ def logout_view(request):
     logout(request)
 
     # Clear all cookies used for the session
-    response = HttpResponseRedirect('/')
+    response = HttpResponseRedirect('microsoft-login/')
     response.delete_cookie('sessionid')  # Adjust as necessary for your cookies' names
 
     # You can also clear other site-specific cookies if you set any
