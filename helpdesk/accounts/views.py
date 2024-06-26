@@ -25,20 +25,22 @@ def login_view(request):
 
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 def logout_view(request):
     # Logout the user to clear the user's session
     logout(request)
 
     # Clear all cookies used for the session
-    response = HttpResponseRedirect('microsoft-login/')
+    response = HttpResponseRedirect(reverse('accounts:microsoft_login'))
     response.delete_cookie('sessionid')  # Adjust as necessary for your cookies' names
 
     # You can also clear other site-specific cookies if you set any
     # response.delete_cookie('cookie_name')
 
-    # Redirect to the home page
+    # Redirect to the Microsoft login page
     return response
+
 
 def microsoft_login_url():
     """Создание URL для входа через Microsoft для перенаправления пользователя."""
