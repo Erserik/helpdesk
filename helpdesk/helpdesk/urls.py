@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import MicrosoftLoginView, MicrosoftLogin
 
+app_name = "main"
+
 urlpatterns = [
     path('', MicrosoftLoginView.as_view(), name="home"),
     path('admin/', admin.site.urls),
