@@ -10,10 +10,9 @@ app_name = "main"
 urlpatterns = [
     path('', MicrosoftLogin, name="home"),
     path('admin/', admin.site.urls),
-    path('orders/', include('orders.urls')),
     path('microsoft/', include('microsoft.urls')),
     path('accounts/', include('accounts.urls')),
-    path('login/', MicrosoftLogin, name="MicrosoftLogin"),
+    path('login/', MicrosoftLoginView.as_view(), name="MicrosoftLogin"),
 ]
 
 urlpatterns += i18n_patterns(
@@ -24,3 +23,8 @@ urlpatterns += i18n_patterns(
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
+
+
