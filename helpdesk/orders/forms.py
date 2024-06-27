@@ -59,3 +59,4 @@ class ProblemForm(forms.ModelForm):
     class Meta:
         model = Problem
         fields = ['name']
+

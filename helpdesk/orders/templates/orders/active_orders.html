@@ -1,42 +1,43 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Active Orders{% endblock %}
+{% block title %}{% trans "Active Orders" %}{% endblock %}
 
 {% block content %}
 <link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
 <div class="claim-box">
     <div class="table-container">
-        <h2>Активные заявки</h2>
+        <h2>{% trans "Active Orders" %}</h2>
         <form method="get" action="{% url 'orders:active_orders' %}" class="filter-form">
             <div class="form-group">
-                <label for="urgency">Срочность:</label>
+                <label for="urgency">{% trans "Urgency:" %}</label>
                 <select name="urgency" id="urgency" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все</option>
-                    <option value="urgent" {% if urgency == 'urgent' %}selected{% endif %}>Срочно</option>
-                    <option value="not_urgent" {% if urgency == 'not_urgent' %}selected{% endif %}>Не срочно</option>
-                    <option value="very_urgent" {% if urgency == 'very_urgent' %}selected{% endif %}>Очень срочно</option>
+                    <option value="">{% trans "All" %}</option>
+                    <option value="urgent" {% if urgency == 'urgent' %}selected{% endif %}>{% trans "Urgent" %}</option>
+                    <option value="not_urgent" {% if urgency == 'not_urgent' %}selected{% endif %}>{% trans "Not Urgent" %}</option>
+                    <option value="very_urgent" {% if urgency == 'very_urgent' %}selected{% endif %}>{% trans "Very Urgent" %}</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="status">Статус:</label>
+                <label for="status">{% trans "Status:" %}</label>
                 <select name="status" id="status" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все</option>
-                    <option value="submitted" {% if status == 'submitted' %}selected{% endif %}>Отправлено</option>
-                    <option value="accepted" {% if status == 'accepted' %}selected{% endif %}>Принято</option>
-                    <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>В процессе</option>
-                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Завершено</option>
+                    <option value="">{% trans "All" %}</option>
+                    <option value="submitted" {% if status == 'submitted' %}selected{% endif %}>{% trans "Submitted" %}</option>
+                    <option value="accepted" {% if status == 'accepted' %}selected{% endif %}>{% trans "Accepted" %}</option>
+                    <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>{% trans "In Progress" %}</option>
+                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>{% trans "Completed" %}</option>
                 </select>
             </div>
         </form>
         <div class="table-wrapper">
             <div class="row header-row">
                 <div class="cell"><p>ID</p></div>
-                <div class="cell"><p>Отправитель</p></div>
-                <div class="cell"><p>Корпус</p></div>
-                <div class="cell"><p>Дата</p></div>
-                <div class="cell"><p>Тип проблемы</p></div>
-                <div class="cell"><p>Срочность</p></div>
-                <div class="cell"><p>Статус</p></div>
+                <div class="cell"><p>{% trans "Sender" %}</p></div>
+                <div class="cell"><p>{% trans "Building" %}</p></div>
+                <div class="cell"><p>{% trans "Date" %}</p></div>
+                <div class="cell"><p>{% trans "Problem Type" %}</p></div>
+                <div class="cell"><p>{% trans "Urgency" %}</p></div>
+                <div class="cell"><p>{% trans "Status" %}</p></div>
                 <div class="cell"></div>
             </div>
             {% for order in orders %}
@@ -48,11 +49,11 @@
                 <div class="cell"><p>{{ order.problem_type }}</p></div>
                 <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
                 <div class="cell"><p>{{ order.get_status_display }}</p></div>
-                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}" class="details-button">Подробнее</a></div>
+                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}" class="details-button">{% trans "More Details" %}</a></div>
             </div>
             {% empty %}
             <div class="row">
-                <div class="cell" colspan="8"><p>Нет активных заявок</p></div>
+                <div class="cell" colspan="8"><p>{% trans "No active orders" %}</p></div>
             </div>
             {% endfor %}
         </div>
@@ -127,14 +128,13 @@
 
     /* Adjust cell widths to better match content needs */
     .cell:nth-child(1) { width: 5%; }  /* ID */
-    .cell:nth-child(2) { width: 15%; } /* Отправитель */
-    .cell:nth-child(3) { width: 10%; } /* Корпус */
-    .cell:nth-child(4) { width: 10%; } /* Дата */
-    .cell:nth-child(5) { width: 20%; } /* Тип проблемы */
-    .cell:nth-child(6) { width: 10%; } /* Срочность */
-    .cell:nth-child(7) { width: 10%; } /* Статус */
-    .cell:nth-child(8) { width: 20%; } /* Подробнее */
-
+    .cell:nth-child(2) { width: 15%; } /* Sender */
+    .cell:nth-child(3) { width: 10%; } /* Building */
+    .cell:nth-child(4) { width: 10%; } /* Date */
+    .cell:nth-child(5) { width: 20%; } /* Problem Type */
+    .cell:nth-child(6) { width: 10%; } /* Urgency */
+    .cell:nth-child(7) { width: 10%; } /* Status */
+    .cell:nth-child(8) { width: 20%; } /* More Details */
 
     .details-button {
         padding: 8px 16px;

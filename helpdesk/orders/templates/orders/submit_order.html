@@ -1,137 +1,126 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Active Orders{% endblock %}
+{% block title %}{% trans "Active Orders" %}{% endblock %}
 
 {% block content %}
 <style>
+    .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 500px;
+    }
 
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 500px;
-        }
+    select, input[type="text"], textarea {
+        width: 100%;
+        padding: 16px;
+        margin-top: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 
-        select, input[type="text"], textarea {
-            width: 100%;
-            padding: 16px;
-            margin-top: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+    textarea {
+        resize: vertical;
+        height: 80px;
+    }
 
-        textarea {
-            resize: vertical;
-            height: 80px;
-        }
+    .submit-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #B1040D;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-top: 16px;
+        cursor: pointer;
+    }
 
-        .submit-button {
-            width: 100%;
-            padding: 10px;
-            background-color: #B1040D;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            margin-top: 16px;
-            cursor: pointer;
-        }
-
-        .submit-button:hover {
-            background-color: #b41717;
-        }
-    </style>
+    .submit-button:hover {
+        background-color: #b41717;
+    }
+</style>
 <div class="claim-box">
-
     <div class="form-container">
-      <form action="{% url 'orders:submit_order' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <select name="building" required>
-        <option value="" selected disabled>Корпус</option>
-        {% for code, name in building_choices %}
-        <option value="{{ code }}">{{ name }}</option>
-        {% endfor %}
-    </select>
-    <input type="text" name="room_number" placeholder="Номер кабинета">
+        <form action="{% url 'orders:submit_order' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <select name="building" required>
+                <option value="" selected disabled>{% trans "Building" %}</option>
+                {% for code, name in building_choices %}
+                <option value="{{ code }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="room_number" placeholder="{% trans "Room Number" %}">
 
-    <select name="problem_type" required>
-        <option value="" selected disabled>Тип проблемы</option>
-        {% for problem in problems %}
-            <option value="{{ problem.id }}">{{ problem.name }}</option>
-        {% endfor %}
-    </select>
+            <select name="problem_type" required>
+                <option value="" selected disabled>{% trans "Problem Type" %}</option>
+                {% for problem in problems %}
+                <option value="{{ problem.id }}">{{ problem.name }}</option>
+                {% endfor %}
+            </select>
 
-    <textarea name="description" placeholder="Описание проблемы"></textarea>
-    <select name="urgency" required>
-      <option value="" selected disabled>Срочность</option>
-      <option value="not_urgent">Не срочно</option>
-      <option value="urgent">Срочно</option>
-      <option value="very_urgent">Очень срочно</option>
-  </select>
-    <input type="file" name="document">
+            <textarea name="description" placeholder="{% trans "Problem Description" %}"></textarea>
+            <select name="urgency" required>
+                <option value="" selected disabled>{% trans "Urgency" %}</option>
+                <option value="not_urgent">{% trans "Not Urgent" %}</option>
+                <option value="urgent">{% trans "Urgent" %}</option>
+                <option value="very_urgent">{% trans "Very Urgent" %}</option>
+            </select>
+            <input type="file" name="document">
 
-    <button type="submit" class="submit-button">ПОДАТЬ ЗАЯВКУ</button>
-</form>
-
-  </div>
+            <button type="submit" class="submit-button">{% trans "Submit Order" %}</button>
+        </form>
+    </div>
 </div>
 
 <style>
+    .claim-box{
+        display: flex;
+        justify-content: center;
+        z-index: 100;
+        left: 44%;
+        text-align: center;
+        margin-top:100px;
+    }
 
+    .claim-box a{
+        z-index: 100;
+        text-decoration: none;
+    }
 
+    .claim-button{
+        display: flex;
+        justify-content: center;
+        width: 500px;
+        height: 180px;
+        background-color: rgba(255, 255, 255, 0.27);
+        border-radius: 30px;
+        padding: 10px;
+        font-size: 13px;
+    }
 
+    .claim-button :hover{
+        color: rgb(197, 197, 197);
+    }
 
-.claim-box{
-  display: flex;
-  justify-content: center;
-  z-index: 100;
-  left: 44%;
-  text-align: center;
-  margin-top:100px;
-}
+    .claim-button h3{
+        color: #5e5e5e;
+        font-weight:600;
+        font-size: 22px;
+    }
 
-.claim-box a{
-  z-index: 100;
-  text-decoration: none;
+    .microsoft-icon{
+        width: 25px;
+        height: auto;
+        padding: 8px;
+    }
 
-}
-
-.claim-button{
-  display: flex;
-justify-content: center;
-  width: 500px;
-  height: 180px;
-  background-color: rgba(255, 255, 255, 0.27);
-  border-radius: 30px;
-  padding: 10px;
-  font-size: 13px;
-}
-.claim-button :hover{
-  color: rgb(197, 197, 197);
-}
-
-.claim-button h3{
-
-color: #5e5e5e;
-font-weight:600;
-font-size: 22px;
-
-}
-
-.microsoft-icon{
-    width: 25px;
-    height: auto;
-    padding: 8px;
-}
-
-.text-sign{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-
-}
-
-
+    .text-sign{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
 </style>
-{%endblock%}
+{% endblock %}

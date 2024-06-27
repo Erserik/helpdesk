@@ -1,62 +1,63 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Finished Orders Reports{% endblock %}
+{% block title %}{% trans "Finished Orders Reports" %}{% endblock %}
 
 {% block content %}
 <link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
 <div class="claim-box">
     <div class="table-container">
-        <h2>Отчеты по завершенным заявкам</h2>
+        <h2>{% trans "Finished Orders Reports" %}</h2>
         <form method="get" action="{% url 'orders:reports' %}" class="filter-form">
             <div class="form-group">
-                <label for="problem_type">Тип проблемы:</label>
+                <label for="problem_type">{% trans "Problem Type:" %}</label>
                 <select name="problem_type" id="problem_type" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все типы</option>
+                    <option value="">{% trans "All Types" %}</option>
                     {% for type in problem_types %}
                     <option value="{{ type.id }}" {% if type.id|stringformat:"s" == request.GET.problem_type %}selected{% endif %}>{{ type.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <label for="start_date">Начало:</label>
+                <label for="start_date">{% trans "Start Date:" %}</label>
                 <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-input">
             </div>
             <div class="form-group">
-                <label for="end_date">Конец:</label>
+                <label for="end_date">{% trans "End Date:" %}</label>
                 <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-input">
             </div>
             <div class="form-group">
-                <label for="executor">Исполнитель:</label>
+                <label for="executor">{% trans "Executor:" %}</label>
                 <select name="executor" id="executor" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все исполнители</option>
+                    <option value="">{% trans "All Executors" %}</option>
                     {% for executor in executors %}
                     <option value="{{ executor.id }}" {% if executor.id == request.GET.executor|stringformat:"s" %}selected{% endif %}>{{ executor.username }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <label for="building">Здание:</label>
+                <label for="building">{% trans "Building:" %}</label>
                 <select name="building" id="building" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все здания</option>
+                    <option value="">{% trans "All Buildings" %}</option>
                     {% for key, value in buildings.items %}
                     <option value="{{ key }}" {% if key|stringformat:"s" == request.GET.building %}selected{% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
         </form>
-        <a href="?download=all" class="btn custom-download-button" style="margin: 10px 0;">Download All Finished Orders</a>
+        <a href="?download=all" class="btn custom-download-button" style="margin: 10px 0;">{% trans "Download All Finished Orders" %}</a>
         <div class="table-wrapper">
             <div class="row header-row">
                 <div class="cell"><p>ID</p></div>
-                <div class="cell"><p>Здание</p></div>
-                <div class="cell"><p>Кабинет</p></div>
-                <div class="cell"><p>Отправитель</p></div>
-                <div class="cell"><p>Исполнитель</p></div>
-                <div class="cell"><p>Статус</p></div>
-                <div class="cell"><p>Срочность</p></div>
-                <div class="cell"><p>Дата создания</p></div>
-                <div class="cell"><p>Дата завершения</p></div>
-                <div class="cell"><p>Скачать</p></div>
+                <div class="cell"><p>{% trans "Building" %}</p></div>
+                <div class="cell"><p>{% trans "Room" %}</p></div>
+                <div class="cell"><p>{% trans "Sender" %}</p></div>
+                <div class="cell"><p>{% trans "Executor" %}</p></div>
+                <div class="cell"><p>{% trans "Status" %}</p></div>
+                <div class="cell"><p>{% trans "Urgency" %}</p></div>
+                <div class="cell"><p>{% trans "Creation Date" %}</p></div>
+                <div class="cell"><p>{% trans "Completion Date" %}</p></div>
+                <div class="cell"><p>{% trans "Download" %}</p></div>
             </div>
             {% for order in orders %}
             <div class="row">
@@ -65,17 +66,17 @@
                 <div class="cell"><p>{{ order.room_number }}</p></div>
                 <div class="cell"><p>{{ order.user.username }}</p></div>
                 <div class="cell">
-                    <p>{% if order.executor %}{{ order.executor.username }}{% else %}None{% endif %}</p>
+                    <p>{% if order.executor %}{{ order.executor.username }}{% else %}{% trans "None" %}{% endif %}</p>
                 </div>
                 <div class="cell"><p>{{ order.get_status_display }}</p></div>
                 <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
                 <div class="cell"><p>{{ order.created_at|date:"Y-m-d H:i" }}</p></div>
                 <div class="cell"><p>{{ order.completed_at|date:"Y-m-d H:i" }}</p></div>
-                <div class="cell"><a href="{% url 'orders:download_order_report' order.id %}" class="details-button">Download</a></div>
+                <div class="cell"><a href="{% url 'orders:download_order_report' order.id %}" class="details-button">{% trans "Download" %}</a></div>
             </div>
             {% empty %}
             <div class="row">
-                <div class="cell" colspan="10"><p>Нет записей</p></div>
+                <div class="cell" colspan="10"><p>{% trans "No records" %}</p></div>
             </div>
             {% endfor %}
         </div>

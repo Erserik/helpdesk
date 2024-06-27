@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load i18n %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Default Title{% endblock %}</title>
     <link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
-    <!-- Custom styles for our template -->
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -14,7 +14,6 @@
             background-color: #E8E8E8;
             font-weight: bold;
         }
-
         .topnav {
             background-color: #B1040D;
             width: 100%;
@@ -24,7 +23,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .topnav a {
             display: flex;
             justify-content: center;
@@ -35,21 +33,17 @@
             text-decoration: none;
             font-size: 20px;
         }
-
         .topnav a:hover {
             color: rgb(131, 130, 130);
         }
-
         .topnav a.active {
             color: #ffffff;
         }
-
         .dropdown {
             position: relative;
             display: inline-block;
             margin-right: 30px;
         }
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -59,21 +53,30 @@
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
         }
-
         .dropdown-content a {
             color: #ffffff;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
         }
-
         .dropdown-content a:hover {
             background-color: #f1f1f1;
             color: #000000;
         }
-
         .dropdown:hover .dropdown-content {
             display: block;
+        }
+        .language-switcher {
+            margin-left: auto;
+        }
+        .language-switcher select {
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #B1040D;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
     {% block additional_styles %}{% endblock %}
@@ -81,6 +84,19 @@
 <body>
 <div class="topnav">
     <a class="active" href="{% url 'orders:order_history' %}">IITU HELP DESK</a>
+    <div class="language-switcher">
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <select name="language" onchange="this.form.submit()">
+                {% for language in languages %}
+                    <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
     <div class="dropdown">
         <a style="color: white">{{ request.user.username }}</a>
         <div class="dropdown-content">
@@ -88,10 +104,10 @@
             <a href="{% url 'orders:active_orders' %}">Активные заявки</a>
             <a href="{% url 'orders:order_history' %}">История заявок</a>
             {% if request.user.role == 'head' %}
-            <a href="{% url 'orders:reports' %}">Отчеты</a>
+                <a href="{% url 'orders:reports' %}">Отчеты</a>
             {% endif %}
             {% if request.user.role == 'ahd' or request.user.role == 'dit' %}
-            <a href="{% url 'orders:manage_problems' %}">Настройки</a>
+                <a href="{% url 'orders:manage_problems' %}">Настройки</a>
             {% endif %}
             <a href="{% url 'accounts:logout' %}">Выйти</a>
         </div>
@@ -99,7 +115,7 @@
 </div>
 
 {% block content %}{% endblock %}
-
 {% block scripts %}{% endblock %}
+
 </body>
 </html>

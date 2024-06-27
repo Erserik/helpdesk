@@ -1,41 +1,42 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Orders History{% endblock %}
+{% block title %}{% trans "Orders History" %}{% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.cdnfonts.com/css/segoe-ui-4" rel="stylesheet">
 <div class="claim-box">
     <div class="table-container">
-        <h2>История заявок</h2>
+        <h2>{% trans "История заявок" %}</h2>
         <form method="get" action="{% url 'orders:order_history' %}" class="filter-form">
             <div class="form-group">
-                <label for="urgency">Срочность:</label>
+                <label for="urgency">{% trans "Срочность:" %}</label>
                 <select name="urgency" id="urgency" class="form-select" onchange="this.form.submit()">
-                    <option value="">Все</option>
-                    <option value="urgent" {% if urgency == 'urgent' %}selected{% endif %}>Срочно</option>
-                    <option value="not_urgent" {% if urgency == 'not_urgent' %}selected{% endif %}>Не срочно</option>
-                    <option value="very_urgent" {% if urgency == 'very_urgent' %}selected{% endif %}>Очень срочно</option>
+                    <option value="">{% trans "Все" %}</option>
+                    <option value="urgent" {% if urgency == 'urgent' %}selected{% endif %}>{% trans "Срочно" %}</option>
+                    <option value="not_urgent" {% if urgency == 'not_urgent' %}selected{% endif %}>{% trans "Не срочно" %}</option>
+                    <option value="very_urgent" {% if urgency == 'very_urgent' %}selected{% endif %}>{% trans "Очень срочно" %}</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Статус:</label>
+                <label>{% trans "Статус:" %}</label>
                 <div class="checkbox-group">
                     <label for="submitted">
                         <input type="checkbox" name="status" value="submitted" id="submitted" {% if 'submitted' in status %}checked{% endif %}>
-                        Отправлено
+                        {% trans "Отправлено" %}
                     </label>
                     <label for="accepted">
                         <input type="checkbox" name="status" value="accepted" id="accepted" {% if 'accepted' in status %}checked{% endif %}>
-                        Принято
+                        {% trans "Принято" %}
                     </label>
                     <label for="in_progress">
                         <input type="checkbox" name="status" value="in_progress" id="in_progress" {% if 'in_progress' in status %}checked{% endif %}>
-                        В процессе
+                        {% trans "В процессе" %}
                     </label>
                     <label for="completed">
                         <input type="checkbox" name="status" value="completed" id="completed" {% if 'completed' in status %}checked{% endif %}>
-                        Завершено
+                        {% trans "Завершено" %}
                     </label>
                 </div>
             </div>
@@ -43,12 +44,12 @@
         <div class="table-wrapper">
             <div class="row header-row">
                 <div class="cell"><p>ID</p></div>
-                <div class="cell"><p>Отправитель</p></div>
-                <div class="cell"><p>Корпус</p></div>
-                <div class="cell"><p>Дата создания</p></div>
-                <div class="cell"><p>Тип проблемы</p></div>
-                <div class="cell"><p>Срочность</p></div>
-                <div class="cell"><p>Статус</p></div>
+                <div class="cell"><p>{% trans "Отправитель" %}</p></div>
+                <div class="cell"><p>{% trans "Корпус" %}</p></div>
+                <div class="cell"><p>{% trans "Дата создания" %}</p></div>
+                <div class="cell"><p>{% trans "Тип проблемы" %}</p></div>
+                <div class="cell"><p>{% trans "Срочность" %}</p></div>
+                <div class="cell"><p>{% trans "Статус" %}</p></div>
                 <div class="cell"></div> <!-- Ensure this cell is present for alignment -->
             </div>
             {% for order in orders %}
@@ -60,23 +61,30 @@
                 <div class="cell"><p>{{ order.problem_type }}</p></div>
                 <div class="cell"><p>{{ order.get_urgency_display }}</p></div>
                 <div class="cell"><p>{{ order.get_status_display }}</p></div>
-                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}" class="details-button">Подробнее</a></div>
+                <div class="cell"><a href="{% url 'orders:order_detail' order.id %}" class="details-button">{% trans "Подробнее" %}</a></div>
             </div>
             {% empty %}
             <div class="row">
-                <div class="cell" colspan="8"><p>Нет записей</p></div>
+                <div class="cell"><p>{% trans "Нет записей" %}</p></div>
             </div>
             {% endfor %}
         </div>
-    <div class="submit-order-button">
-    <a href="{% url 'orders:submit_order' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i>
-    </a>
-</div>
+        <div class="submit-order-button">
+            <a href="{% url 'orders:submit_order' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
     </div>
-
 </div>
-
+<div style="display: none;">
+    <p>LANGUAGE_CODE: {{ LANGUAGE_CODE }}</p>
+    <p>Languages:</p>
+    <ul>
+        {% for language in languages %}
+            <li>{{ language.name_local }} ({{ language.code }})</li>
+        {% endfor %}
+    </ul>
+</div>
 <style>
     .claim-box {
         display: flex;
@@ -171,21 +179,21 @@
         background-color: #D1160C;
     }
     .submit-order-button .btn {
-    margin-top: 20px;
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
+        margin-top: 20px;
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
 
-.submit-order-button .btn:hover {
-    background-color: #45a049;
-}
+    .submit-order-button .btn:hover {
+        background-color: #45a049;
+    }
 </style>
 {% endblock %}
