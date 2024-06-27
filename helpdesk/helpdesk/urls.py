@@ -3,10 +3,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import MicrosoftLoginView, MicrosoftLogin
-from django.conf.urls.i18n import i18n_patterns
+
+app_name = "main"
 
 urlpatterns = [
+    path('', MicrosoftLogin, name="home"),
     path('admin/', admin.site.urls),
+    path('orders/', include('orders.urls')),
     path('microsoft/', include('microsoft.urls')),
     path('accounts/', include('accounts.urls')),
     path('login/', MicrosoftLogin, name="MicrosoftLogin"),

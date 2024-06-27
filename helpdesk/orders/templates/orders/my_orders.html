@@ -1,5 +1,4 @@
 {% extends "core/base.html" %}
-{% load i18n %}
 
 {% block title %}{% trans "Orders History" %}{% endblock %}
 
@@ -178,6 +177,7 @@
     .details-button:hover {
         background-color: #D1160C;
     }
+
     .submit-order-button .btn {
         margin-top: 20px;
         background-color: #4CAF50; /* Green */
@@ -194,6 +194,35 @@
 
     .submit-order-button .btn:hover {
         background-color: #45a049;
+    }
+
+    @media (max-width: 768px) {
+        .table-container {
+            width: 100%;
+        }
+
+        .filter-form {
+            flex-direction: column;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .row.header-row, .row {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .cell {
+            display: inline-block;
+            text-align: left;
+            border-right: none;
+            border-bottom: none;
+            width: auto;
+        }
     }
 </style>
 {% endblock %}
