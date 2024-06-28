@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 11:33+0500\n"
+"POT-Creation-Date: 2024-06-28 11:41+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:4
 #: .\orders\templates\orders\active_orders.html:10
+#: .\orders\templates\orders\submit_order.html:4
 msgid "Active Orders"
 msgstr ""
 
@@ -38,16 +39,19 @@ msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:16
 #: .\orders\templates\orders\order_history.html:16
+#: .\orders\templates\orders\submit_order.html:68
 msgid "Urgent"
 msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:17
 #: .\orders\templates\orders\order_history.html:17
+#: .\orders\templates\orders\submit_order.html:67
 msgid "Not Urgent"
 msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:18
 #: .\orders\templates\orders\order_history.html:18
+#: .\orders\templates\orders\submit_order.html:69
 msgid "Very Urgent"
 msgstr ""
 
@@ -86,6 +90,7 @@ msgstr ""
 #: .\orders\templates\orders\active_orders.html:36
 #: .\orders\templates\orders\order_history.html:36
 #: .\orders\templates\orders\reports.html:52
+#: .\orders\templates\orders\submit_order.html:50
 msgid "Building"
 msgstr ""
 
@@ -96,12 +101,14 @@ msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:38
 #: .\orders\templates\orders\order_history.html:38
+#: .\orders\templates\orders\submit_order.html:58
 msgid "Problem Type"
 msgstr ""
 
 #: .\orders\templates\orders\active_orders.html:39
 #: .\orders\templates\orders\order_history.html:39
 #: .\orders\templates\orders\reports.html:57
+#: .\orders\templates\orders\submit_order.html:66
 msgid "Urgency"
 msgstr ""
 
@@ -289,15 +296,6 @@ msgstr ""
 msgid "Reassign"
 msgstr ""
 
-msgid "Problem Description"
-msgstr ""
-
-msgid "Submit Order"
-msgstr ""
-
-msgid "Room Number"
-msgstr ""
-
 #: .\orders\templates\orders\order_history.html:56
 #: .\orders\templates\orders\reports.html:79
 msgid "No records"
@@ -383,6 +381,18 @@ msgstr ""
 
 #: .\orders\templates\orders\settings.html:39
 msgid "Edit"
+msgstr ""
+
+#: .\orders\templates\orders\submit_order.html:55
+msgid "Room Number"
+msgstr ""
+
+#: .\orders\templates\orders\submit_order.html:64
+msgid "Problem Description"
+msgstr ""
+
+#: .\orders\templates\orders\submit_order.html:73
+msgid "Submit Order"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\contrib\messages\apps.py:16

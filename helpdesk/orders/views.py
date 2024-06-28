@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_date
 from openpyxl.workbook import Workbook
 from django.db.models import Q
+from django.utils.translation import gettext as _
 
 from accounts.models import CustomUser
 from .forms import OrderProfileForm, OrderReassignmentForm, OrderStatusUpdateForm, ChatMessageForm, ProblemForm
@@ -19,7 +20,11 @@ from django.db.models import Case, When, IntegerField
 @login_required
 def submit_order(request):
     problems = Problem.objects.all()
-    building_choices = Order.BUILDING_CHOICES
+    building_choices = [
+        ('main', _('Main Building')),
+        ('baizak', _('Baizak Building')),
+        ('gym', _('Gym'))
+    ]
 
     if request.method == 'POST':
         form = OrderProfileForm(request.POST, request.FILES)
@@ -27,7 +32,6 @@ def submit_order(request):
             order = form.save(commit=False)
             order.user = request.user
             order.save()
-            print(request.user)
             send_mail(
                 'Welcome to Our Site',
                 'Thanks for signing up!',
