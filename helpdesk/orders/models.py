@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+
 User = get_user_model()
 class Problem(models.Model):
     DEPARTMENT_CHOICES = [
@@ -18,23 +21,23 @@ class Problem(models.Model):
 
 class Order(models.Model):
     BUILDING_CHOICES = [
-        ('main', 'Главный'),
-        ('baizak', 'Байзак'),
-        ('gym', 'Спортзал')
+        ('main', _('Главный')),
+        ('baizak', _('Байзак')),
+        ('gym', _('Спортзал')),
     ]
 
     STATUS_CHOICES = [
-        ('submitted', 'Отправлено'),
-        ('accepted', 'Принято'),
-        ('in_progress', 'В процессе'),
-        ('completed', 'Завершено'),
-        ('freeze', 'Заморожен')
+        ('submitted', _('Отправлено')),
+        ('accepted', _('Принято')),
+        ('in_progress', _('В процессе')),
+        ('completed', _('Завершено')),
+        ('freeze', _('Заморожен')),
     ]
 
     URGENCY_CHOICES = [
-        ('urgent', 'Срочно'),
-        ('not_urgent', 'Не срочно'),
-        ('very_urgent', 'Очень срочно')
+        ('urgent', _('Срочно')),
+        ('not_urgent', _('Не срочно')),
+        ('very_urgent', _('Очень срочно')),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     building = models.CharField(max_length=100, choices=BUILDING_CHOICES)

@@ -21,14 +21,50 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
 
+#: models.py:10
 msgid "Main Building"
-msgstr "Главный корпус"
+msgstr "Главный"
 
+#: models.py:11
 msgid "Baizak Building"
-msgstr "Байзак корпус"
+msgstr "Байзак"
 
+#: models.py:12
 msgid "Gym"
 msgstr "Спортзал"
+
+#: models.py:15
+msgid "Submitted"
+msgstr "Отправлено"
+
+#: models.py:16
+msgid "Accepted"
+msgstr "Принято"
+
+#: models.py:17
+msgid "In progress"
+msgstr "В процессе"
+
+#: models.py:18
+msgid "Completed"
+msgstr "Завершено"
+
+#: models.py:19
+msgid "Freeze"
+msgstr "Заморожен"
+
+#: models.py:22
+msgid "Urgent"
+msgstr "Срочно"
+
+#: models.py:23
+msgid "Not urgent"
+msgstr "Не срочно"
+
+#: models.py:24
+msgid "Very urgent"
+msgstr "Очень срочно"
+
 
 
 #: .\orders\templates\orders\active_orders.html:4
